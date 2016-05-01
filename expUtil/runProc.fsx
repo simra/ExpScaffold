@@ -4,7 +4,7 @@ open System
 open System.Diagnostics
 
 let runProc filename args startDir = 
-    eprintfn "runProc %s %s (in %s)" filename args (match startDir with | Some(s)->s | None ->".")
+    //eprintfn "runProc %s %s (in %s)" filename args (match startDir with | Some(s)->s | None ->".")
     //let timer = Stopwatch.StartNew()
     let procStartInfo = 
         ProcessStartInfo(

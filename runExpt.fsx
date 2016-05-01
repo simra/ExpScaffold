@@ -12,6 +12,7 @@ open runProc
 
 // EDIT THESE FOR YOUR EXPERIMENT.
 let resultFile = "results.txt"
+// experimentCommand will be run in a shell under Experiments\[timestamp]
 let experimentCommand = sprintf "echo %%DATE%% %%TIME%% > %s" resultFile
 let expFolder = "Experiments"
 let verbosity=1
