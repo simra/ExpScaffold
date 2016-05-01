@@ -18,11 +18,12 @@ let verbosity=1
 
 if not (Directory.Exists(expFolder)) then Directory.CreateDirectory(expFolder)|>ignore
 
-let workingTag = sprintf "%s\%s" expFolder (DateTime.Now.ToString("yyyyMMddhhmm"))
+let timestamp = DateTime.Now.ToString("yyyyMMddhhmm")
+let workingTag = sprintf "%s/%s" expFolder timestamp
       
 if repoIsReady() then 
-    gitCommit(sprintf "Running experiment %s" workingTag)
-    gitTag workingTag (sprintf "Tagged experiment %s" workingTag) // necessary?
+    gitCommit(sprintf "Running experiment %s" timestamp)
+    gitTag timestamp (sprintf "Tagged experiment %s" timestamp) // necessary?
     gitSubmod(workingTag) // submodule or something else?
 
     runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag) |> ignore
