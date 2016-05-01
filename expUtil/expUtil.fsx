@@ -31,17 +31,30 @@ let argsOrDefault switch defaultStr =
     else defaultStr
 
 let gitCmd = @"C:\Program Files\Git\cmd\git.exe"
+let runGitWithOutput args = runProc gitCmd args None
 let runGit args = 
-    runProc gitCmd args None
+    runGitWithOutput args
     |> fun (err,out) ->
         err|>Seq.iter (eprintfn "%s")
         out|>Seq.iter (eprintfn "%s")
+
         
-
-
 // todo: adds and/or tagging/branching.
 let gitCommit message = runGit (sprintf "commit -m \"%s\"" message) 
 let gitTag tag message = runGit (sprintf "tag -a %s -m \"%s\"" tag message) 
 let gitSubmod workingDir = runGit (sprintf "submodule add \"%s\" %s" (Directory.GetCurrentDirectory()) workingDir) 
 let gitAdd fn = runGit (sprintf "add %s" fn)
 let gitPush () = runGit "push"
+let gitStatus() = runGitWithOutput "status"
+
+let repoIsReady() =
+    gitStatus()
+    |> fun (out,err) ->
+        out
+        |> Seq.filter(fun s -> not (s.Contains(".gitmodules")) && s.Trim().StartsWith("modified:") && not (s.Contains("(untracked content)")) && not (s.Contains("(new commits)"))) 
+        |> fun s ->
+            if (not (Seq.isEmpty s)) then
+                eprintfn "git add these changes first:"
+                s|>Seq.iter (printfn "%s")
+                false
+            else  true

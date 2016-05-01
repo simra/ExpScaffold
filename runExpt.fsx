@@ -17,24 +17,25 @@ let verbosity=1
 
 let workingTag = DateTime.Now.ToString("yyyyMMddhhmm")
 
-gitCommit(workingTag)
-gitTag workingTag (sprintf "Tagged experiment %s" workingTag)
-gitSubmod(workingTag)
+      
+if repoIsReady() then 
+    gitCommit(sprintf "Running experiment %s" workingTag)
+    gitTag workingTag (sprintf "Tagged experiment %s" workingTag)
+    gitSubmod(workingTag) // submodule or something else?
 
-runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag)
+    runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag) |> ignore
 
-let expectedResult=sprintf @"%s\%s" workingTag resultFile
-if File.Exists(expectedResult) then
-    Directory.SetCurrentDirectory(workingTag)
-    gitAdd(resultFile) |> ignore
-    gitCommit(sprintf "Experiment %s results." workingTag) |> ignore
-    gitPush() |> ignore
-    if verbosity>0 then 
-        File.ReadAllLines resultFile
-        |> Seq.iter (printfn "%s")
-    // Concat to global result file?
-
-Directory.SetCurrentDirectory("..")
+    let expectedResult=sprintf @"%s\%s" workingTag resultFile
+    if File.Exists(expectedResult) then
+        Directory.SetCurrentDirectory(workingTag)
+        gitAdd(resultFile) |> ignore
+        gitCommit(sprintf "Experiment %s results." workingTag) |> ignore
+    //    gitPush() |> ignore -- TODO: should we push the results back up?  
+        if verbosity>0 then 
+            File.ReadAllLines resultFile
+            |> Seq.iter (printfn "%s")
+        // Concat to global result file?
+        Directory.SetCurrentDirectory("..")
 
 
 
