@@ -40,9 +40,9 @@ let runGit args =
         out|>Seq.iter (eprintfn "%s")
 
         
-// todo: adds and/or tagging/branching.
+let guard (str:string) = str.Replace("/","_").Replace("\\","_")
 let gitCommit message = runGit (sprintf "commit -m \"%s\"" message) 
-let gitTag tag message = runGit (sprintf "tag -a %s -m \"%s\"" tag message) 
+let gitTag tag message = runGit (sprintf "tag -a %s -m \"%s\"" tag (guard message)) 
 let gitSubmod workingDir = runGit (sprintf "submodule add \"%s\" %s" (Directory.GetCurrentDirectory()) workingDir) 
 let gitAdd fn = runGit (sprintf "add %s" fn)
 let gitPush () = runGit "push"
