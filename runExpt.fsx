@@ -1,5 +1,7 @@
 #load @"expUtil\expUtil.fsx"
+#load @"expUtil\runProc.fsx"
 open expUtil
+open runProc
 open System
 open System.IO
 
@@ -19,13 +21,12 @@ gitCommit(workingTag)
 gitTag workingTag (sprintf "Tagged experiment %s" workingTag)
 gitSubmod(workingTag)
 
-// set working directory
-Directory.SetCurrentDirectory(workingTag)
+runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag)
 
-system experimentCommand
-
-if File.Exists(@".\results.txt") then
-    gitAdd("results.txt") |> ignore
+let expectedResult=sprintf @"%s\%s" workingTag resultFile
+if File.Exists(expectedResult) then
+    Directory.SetCurrentDirectory(workingTag)
+    gitAdd(resultFile) |> ignore
     gitCommit(sprintf "Experiment %s results." workingTag) |> ignore
     gitPush() |> ignore
     if verbosity>0 then 
