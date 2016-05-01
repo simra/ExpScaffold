@@ -25,7 +25,7 @@ let workingTag = sprintf "%s/%s" expFolder timestamp
 if repoIsReady() then 
     gitCommit(sprintf "Running experiment %s" timestamp)
     gitTag timestamp (sprintf "Tagged experiment %s" timestamp) // necessary?
-    gitSubmod(workingTag) // submodule or something else?
+    gitClone "." workingTag // submodule or something else?
 
     runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag) |> ignore
 
@@ -34,7 +34,7 @@ if repoIsReady() then
         let currentDir=Directory.GetCurrentDirectory()
         Directory.SetCurrentDirectory(workingTag)
         gitAdd(resultFile) |> ignore
-        gitCommit(sprintf "Experiment %s results." workingTag) |> ignore
+        gitCommit(sprintf "Experiment %s results." timestamp) |> ignore
     //    gitPush() |> ignore -- TODO: should we push the results back up?  
         if verbosity>0 then 
             File.ReadAllLines resultFile
