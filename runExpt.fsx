@@ -5,11 +5,6 @@ open System.IO
 open expUtil
 open runProc
 
-// TODO: 
-// pass-through command-line args and include them in any commit message.
-// git add any changes automagically.
-// collect a description.
-
 // EDIT THESE FOR YOUR EXPERIMENT.
 let resultFile = "results.txt"
 // experimentCommand will be run in a shell under Experiments\[timestamp]

@@ -18,7 +18,4 @@ Requirements:
 * fsi.exe in your path. [http://fsharpforfunandprofit.com/installing-and-using/]
 * git in your path. (currently the default windows path is hard-coded in expUtil\expUtil.fsx)
 
-TODO:
-* capture commit descriptions
-* provide some facilities to list experiments.
-* provide facilities for automating things like parameter sweeps?
+
