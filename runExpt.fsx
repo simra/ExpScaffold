@@ -14,7 +14,7 @@ let verbosity=1
 
 if not (Directory.Exists(expFolder)) then Directory.CreateDirectory(expFolder)|>ignore
 
-let timestamp = DateTime.Now.ToString("yyyyMMddhhmm")
+let timestamp = DateTime.Now.ToString("yyyyMMddHHmm")
 let workingTag = sprintf "%s/%s" expFolder timestamp
       
 if repoIsReady() then 
