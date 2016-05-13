@@ -1,7 +1,7 @@
 ## TODO items and other open issues
 
-* pass-through command-line args and include them in any commit message.
 * capture commit descriptions
+* options to log stdout/stderr and asynchronously write to console.
 * provide some facilities to list experiments.
 * provide facilities for automating things like parameter sweeps?
 * should we scrub commit history with each fork?

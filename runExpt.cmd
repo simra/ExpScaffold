@@ -1,1 +1,1 @@
-fsi runExpt.fsx
+fsi runExpt.fsx %*

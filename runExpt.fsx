@@ -16,13 +16,18 @@ if not (Directory.Exists(expFolder)) then Directory.CreateDirectory(expFolder)|>
 
 let timestamp = DateTime.Now.ToString("yyyyMMddHHmm")
 let workingTag = sprintf "%s/%s" expFolder timestamp
+
+let message = argsOrDefault "-m" (sprintf "Running experiment %s" timestamp)
       
 if repoIsReady() then 
-    gitCommit(sprintf "Running experiment %s" timestamp)
+    gitCommit(message)
     gitTag timestamp (sprintf "Tagged experiment %s" timestamp) // necessary?
     gitClone "." workingTag // submodule or something else?
 
-    runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag) |> ignore
+    runProc "cmd.exe" (sprintf "/c %s" experimentCommand) (Some workingTag)     
+    |> fun (out,err) ->
+        out |> Seq.iter (eprintfn "OUTPUT: %s") 
+        err |> Seq.iter (eprintfn "ERROR: %s")
 
     let expectedResult=sprintf @"%s\%s" workingTag resultFile
     if File.Exists(expectedResult) then
